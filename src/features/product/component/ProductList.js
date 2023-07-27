@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from "@heroicons/react/20/solid";
 import {
     ChevronDownIcon,
     FunnelIcon,
@@ -11,6 +11,7 @@ import {
     Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import {fetchAllProductsAsync, selectAllProducts } from "../productSlice";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -37,11 +38,13 @@ const filters = [
         id: "category",
         name: "Category",
         options: [
-            { value: "new-arrivals", label: "New Arrivals", checked: false },
-            { value: "sale", label: "Sale", checked: false },
-            { value: "travel", label: "Travel", checked: true },
-            { value: "organization", label: "Organization", checked: false },
-            { value: "accessories", label: "Accessories", checked: false },
+            { value: "smartphones", label: "smartphones", checked: false },
+            { value: "laptops", label: "laptops", checked: false },
+            { value: "fragrances", label: "fragrances", checked: false },
+            { value: "skincare", label: "skincare", checked: false },
+            { value: "groceries", label: "groceries", checked: false },
+            { value: "home-decoration", label: "home decoration", checked: false },
+            
         ],
     },
     {
@@ -85,46 +88,17 @@ const items = [
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
-const products = [
-    {
-        id: 1,
-        name: "Basic Tee",
-        href: "#",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: "$35",
-        color: "Black",
-    },
-    {
-        id: 2,
-        name: "Basic Tee",
-        href: "#",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: "$35",
-        color: "Black",
-    },
-    {
-        id: 3,
-        name: "Basic Tee",
-        href: "#",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: "$35",
-        color: "Black",
-    },
 
-    // More products...
-];
 
 export default function ProductList() {
-    // const count = useSelector(selectCount);
     const dispatch = useDispatch();
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const products = useSelector(selectAllProducts);
 
+    useEffect(() => {
+        dispatch(fetchAllProductsAsync());
+    }, [dispatch]);
+    
     return (
         <div>
             <div>
@@ -461,15 +435,15 @@ export default function ProductList() {
                                                         >
                                                             <div
                                                                 key={product.id}
-                                                                className="group relative"
+                                                                className="group relative border-solid border-2 p-2 border-gray-200"
                                                             >
-                                                                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                                                                <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                                                                     <img
                                                                         src={
-                                                                            product.imageSrc
+                                                                            product.thumbnail
                                                                         }
                                                                         alt={
-                                                                            product.imageAlt
+                                                                            product.title
                                                                         }
                                                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                                                     />
@@ -479,7 +453,7 @@ export default function ProductList() {
                                                                         <h3 className="text-sm text-gray-700">
                                                                             <a
                                                                                 href={
-                                                                                    product.href
+                                                                                    product.thumbnail
                                                                                 }
                                                                             >
                                                                                 <span
@@ -487,21 +461,32 @@ export default function ProductList() {
                                                                                     className="absolute inset-0"
                                                                                 />
                                                                                 {
-                                                                                    product.name
+                                                                                    product.title
                                                                                 }
                                                                             </a>
                                                                         </h3>
                                                                         <p className="mt-1 text-sm text-gray-500">
-                                                                            {
-                                                                                product.color
+                                                                            <StarIcon className="w-6 h-6 inline" />
+                                                                            <span className="align-bottom">{
+                                                                                product.rating
                                                                             }
+                                                                            </span>
                                                                         </p>
                                                                     </div>
-                                                                    <p className="text-sm font-medium text-gray-900">
-                                                                        {
+                                                                    <div>
+                                                                    <p className="text-sm block font-medium text-gray-900">
+                                                                        ${
+                                                                            Math.round(product.price * (1 - product.discountPercentage / 100))
+                                                                        }
+                                                                    </p>
+                                                                    <p className="text-sm block line-through font-medium text-gray-400">
+                                                                        ${
                                                                             product.price
                                                                         }
                                                                     </p>
+                                                                    
+                                                                    </div>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </Link>
