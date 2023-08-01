@@ -38,8 +38,6 @@ const sortOptions = [
     },
 ];
 
-
-
 const items = [
     {
         id: 1,
@@ -82,7 +80,7 @@ export default function ProductList() {
             name: "Category",
             options: categories,
         },
-    
+
         {
             id: "brand",
             name: "Brand",
@@ -434,7 +432,7 @@ function MobileFilter({
     );
 }
 
-function DesktopFilter({ handleFilter, filters, }) {
+function DesktopFilter({ handleFilter, filters }) {
     return (
         <form className="hidden lg:block">
             {filters.map((section) => (
@@ -515,13 +513,15 @@ function Pagination({ handlePage, page, setPage, totalItems }) {
         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
             <div className="flex flex-1 justify-between sm:hidden">
                 <div
-                    onClick={(e) => handlePage(page>1 ? page - 1 : page)}
+                    onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                     Previous
                 </div>
                 <div
-                    onClick={(e) => handlePage(page<totalPages ? page + 1 : page)}
+                    onClick={(e) =>
+                        handlePage(page < totalPages ? page + 1 : page)
+                    }
                     className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                     Next
@@ -536,7 +536,9 @@ function Pagination({ handlePage, page, setPage, totalItems }) {
                         </span>{" "}
                         to{" "}
                         <span className="font-medium">
-                            {page * ITEMS_PER_PAGE > totalItems ? totalItems : page * ITEMS_PER_PAGE}
+                            {page * ITEMS_PER_PAGE > totalItems
+                                ? totalItems
+                                : page * ITEMS_PER_PAGE}
                         </span>{" "}
                         of <span className="font-medium">{totalItems}</span>{" "}
                         results
@@ -548,7 +550,9 @@ function Pagination({ handlePage, page, setPage, totalItems }) {
                         aria-label="Pagination"
                     >
                         <div
-                             onClick={(e) => handlePage(page>1 ? page - 1 : page)}
+                            onClick={(e) =>
+                                handlePage(page > 1 ? page - 1 : page)
+                            }
                             className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                         >
                             <span className="sr-only">Previous</span>
@@ -575,8 +579,9 @@ function Pagination({ handlePage, page, setPage, totalItems }) {
                         ))}
 
                         <div
-                            onClick={(e) => handlePage(page<totalPages ? page + 1 : page)}
-                           
+                            onClick={(e) =>
+                                handlePage(page < totalPages ? page + 1 : page)
+                            }
                             className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                         >
                             <span className="sr-only">Next</span>
@@ -599,7 +604,7 @@ function ProductGrid({ products }) {
             <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                     {products.map((product) => (
-                        <Link to={"/product-detail"}>
+                        <Link to={`product-detail/${product.id}`}>
                             <div
                                 key={product.id}
                                 className="group relative border-solid border-2 p-2 border-gray-200"
