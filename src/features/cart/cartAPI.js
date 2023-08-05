@@ -49,6 +49,6 @@ export function deleteItemFromCart(id) {
         });
 
         const data = await response.json();
-        resolve({ data });
+        resolve({ data:{id:id} });
     });
 }
