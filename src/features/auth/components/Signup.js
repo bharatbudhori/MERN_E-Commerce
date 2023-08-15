@@ -13,7 +13,6 @@ export default function Signup() {
     } = useForm();
 
     const user = useSelector(selectLoggedInUser);
-    
 
     return (
         <>
@@ -35,11 +34,13 @@ export default function Signup() {
                         noValidate
                         className="space-y-6"
                         onSubmit={handleSubmit((data) => {
-                            dispatch(createUserAsync({
-                                email: data.email,
-                                password: data.password,
-                                addresses: [],
-                            }));
+                            dispatch(
+                                createUserAsync({
+                                    email: data.email,
+                                    password: data.password,
+                                    addresses: [],
+                                })
+                            );
                             console.log(data);
                         })}
                     >
@@ -83,12 +84,12 @@ export default function Signup() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/forgot-password"
                                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                                     >
                                         Forgot password?
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="mt-2">
@@ -99,7 +100,8 @@ export default function Signup() {
                                         pattern: {
                                             //Sould contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character
                                             value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                                            message: "Should contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character and minimum 8 characters" ,
+                                            message:
+                                                "Should contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character and minimum 8 characters",
                                         },
                                     })}
                                     type="password"
@@ -131,7 +133,8 @@ export default function Signup() {
                                     {...register("confirmPassword", {
                                         required: "Password is not matching",
                                         validate: (value, formValue) =>
-                                            value === formValue.password || "Password is not matching",
+                                            value === formValue.password ||
+                                            "Password is not matching",
                                     })}
                                     type="password"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

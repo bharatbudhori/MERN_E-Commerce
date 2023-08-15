@@ -31,4 +31,12 @@ export function checkUser(loginInfo){
     });
 }
 
+export function signOut(userId) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({ data: 'success' });
+        }, 500);
+    });
+}
+
 
