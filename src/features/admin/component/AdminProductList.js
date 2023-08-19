@@ -24,7 +24,7 @@ import {
     selectCategories,
     fetchBrandsAsync,
     fetchCategoriesAsync,
-} from "../productSlice";
+} from "../../product/productSlice";
 import { ITEMS_PER_PAGE } from "../../../app/constants";
 
 const sortOptions = [
@@ -66,7 +66,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function ProductList() {
+export default function AdminProductList() {
     const dispatch = useDispatch();
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const products = useSelector(selectAllProducts);
@@ -266,7 +266,16 @@ export default function ProductList() {
                                     />
 
                                     {/* Product grid */}
+
                                     <div className="lg:col-span-3">
+                                        <div>
+                                            <Link
+                                                to="/admin/product-form"
+                                                className="rounded-md mx-10 my-5 bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            >
+                                                Add New Product
+                                            </Link>
+                                        </div>
                                         <ProductGrid products={products} />
                                     </div>
                                     {/* Product grid end */}
@@ -656,6 +665,15 @@ function ProductGrid({ products }) {
                                         </p>
                                     </div>
                                 )}
+                            </div>
+
+                            <div className="mt-5">
+                                <Link
+                                    to={`/admin/product-form/edit/${product.id}`}
+                                    className="rounded-md my-5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    Edit Product
+                                </Link>
                             </div>
                         </Link>
                     ))}
