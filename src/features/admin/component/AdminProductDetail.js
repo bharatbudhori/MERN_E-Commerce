@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectProductById, fetchProductByIdAsync } from "../../product/productSlice"
+import {
+    selectProductById,
+    fetchProductByIdAsync,
+} from "../../product/productSlice";
 import { addToCartAsync } from "../../cart/cartSlice";
 import { selectUserInfo } from "../../user/userSlice";
+import { discountedPrice } from "../../../app/constants";
 
 const colors = [
     { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
@@ -43,7 +47,7 @@ export default function AdminProductDetail() {
     const handleCart = (e) => {
         e.preventDefault();
         const newItem = { ...product, quantity: 1, user: user.id };
-        delete newItem['id'];
+        delete newItem["id"];
         dispatch(addToCartAsync(newItem));
     };
 
@@ -138,8 +142,11 @@ export default function AdminProductDetail() {
                             {/* Options */}
                             <div className="mt-4 lg:row-span-3 lg:mt-0">
                                 <h2 className="sr-only">Product information</h2>
-                                <p className="text-3xl tracking-tight text-gray-900">
+                                <p className="text-xl line-through tracking-tight text-gray-900">
                                     {product.price}
+                                </p>
+                                <p className="text-3xl  tracking-tight text-gray-900">
+                                    {discountedPrice(product)}
                                 </p>
 
                                 {/* Reviews */}
