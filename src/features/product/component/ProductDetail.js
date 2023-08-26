@@ -5,7 +5,7 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectProductById, fetchProductByIdAsync } from "../productSlice";
-import { addToCartAsync } from "../../cart/cartSlice";
+import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectUserInfo } from "../../user/userSlice";
 import { discountedPrice } from "../../../app/constants";
 
@@ -34,8 +34,9 @@ export default function ProductDetail() {
     const [selectedSize, setSelectedSize] = useState(sizes[2]);
     const product = useSelector(selectProductById);
     const user = useSelector(selectUserInfo);
+    const items = useSelector(selectItems);
     const dispatch = useDispatch();
-    const id = useParams().id;
+    const id = useParams().id; 
 
     useEffect(() => {
         dispatch(fetchProductByIdAsync(id));
@@ -43,9 +44,14 @@ export default function ProductDetail() {
 
     const handleCart = (e) => {
         e.preventDefault();
-        const newItem = { ...product, quantity: 1, user: user.id };
-        delete newItem['id'];
-        dispatch(addToCartAsync(newItem));
+        if(items.findIndex((item) => item.productId === product.id) < 0){
+            const newItem = { ...product, productId : product.id, quantity: 1, user: user.id };
+            delete newItem['id'];
+            dispatch(addToCartAsync(newItem));
+        }else{
+            alert("Product is already in cart");
+        }
+        
     };
 
     return (

@@ -13,8 +13,13 @@ export function createOrder(order) {
     });
 }
 
-export function fetchAllOrders(pagination) {
+export function fetchAllOrders(sort, pagination) {
     let queryString = "";
+
+    for (let key in sort) {
+        const sortValue = sort[key];
+        queryString += `${key}=${sortValue}&`;
+    }
 
     for (let key in pagination) {
         const paginationValue = pagination[key];
@@ -27,7 +32,25 @@ export function fetchAllOrders(pagination) {
             "http://localhost:8080/orders?" + queryString
         );
         const data = await response.json();
-        const totalOrders = response.headers.get("x-total-count");
+        const totalOrders = response.headers.get("X-Total-Count");
         resolve({ data: { orders: data, totalOrders: +totalOrders } });
+    });
+}
+
+export function updateOrder(order) {
+    return new Promise(async (resolve) => {
+        const response = await fetch(
+            "http://localhost:8080/orders/" + order.id,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(order),
+            }
+        );
+
+        const data = await response.json();
+        resolve({ data });
     });
 }
