@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteItemAsync, selectItems, updateItemAsync } from "./cartSlice";
 import { Link, Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
+import Modal from "../common/Modal";
 
 export default function Cart() {
     const dispatch = useDispatch();
     const items = useSelector(selectItems);
     const [open, setOpen] = useState(true);
+    const [showModal, setShowModal] = useState(null);
 
     const totalAmount = items.reduce(
         (amount, item) => discountedPrice(item) * item.quantity + amount,
@@ -86,10 +88,32 @@ export default function Cart() {
                                             </div>
 
                                             <div className="flex">
+                                                {showModal && (
+                                                    <Modal
+                                                        title={`Delete ${item.title} from cart`}
+                                                        message="Are you sure you want to delete this cart item ?"
+                                                        dangerOption="Delete"
+                                                        cancelOption="Cancel"
+                                                        dangerAction={(e) =>
+                                                            handleDelete(
+                                                                e,
+                                                                item.id
+                                                            )
+                                                        }
+                                                        cancelAction={() =>
+                                                            setShowModal(null)
+                                                        }
+                                                        showModal={
+                                                            showModal ===
+                                                            item.id
+                                                        }
+                                                    />
+                                                )}
+
                                                 <button
-                                                    onClick={(e) =>
-                                                        handleDelete(e, item.id)
-                                                    }
+                                                    onClick={(e) => {
+                                                        setShowModal(item.id);
+                                                    }}
                                                     type="button"
                                                     className="font-medium text-indigo-600 hover:text-indigo-500"
                                                 >
