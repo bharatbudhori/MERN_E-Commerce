@@ -52,6 +52,7 @@ function Navbar({ children }) {
                                                 {navigation.map((item) =>
                                                     item[user.role] ? (
                                                         <Link
+                                                            id={item.id}
                                                             key={item.name}
                                                             to={item.link}
                                                             className={classNames(

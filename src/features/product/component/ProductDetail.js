@@ -8,7 +8,7 @@ import { selectProductById, fetchProductByIdAsync } from "../productSlice";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectUserInfo } from "../../user/userSlice";
 import { discountedPrice } from "../../../app/constants";
-import {useAlert} from "react-alert";
+import { useAlert } from "react-alert";
 
 const colors = [
     { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
@@ -37,7 +37,7 @@ export default function ProductDetail() {
     const user = useSelector(selectUserInfo);
     const items = useSelector(selectItems);
     const dispatch = useDispatch();
-    const id = useParams().id; 
+    const id = useParams().id;
     const alert = useAlert();
 
     useEffect(() => {
@@ -46,17 +46,17 @@ export default function ProductDetail() {
 
     const handleCart = (e) => {
         e.preventDefault();
-        if(items.findIndex((item) => item.productId === product.id) < 0){
-            const newItem = { ...product, productId : product.id, quantity: 1, user: user.id };
-            delete newItem['id'];
+        if (items.findIndex((item) => item.product.id === product.id) < 0) {
+            const newItem = {
+                product: product.id,
+                quantity: 1,
+                user: user.id,
+            };
             dispatch(addToCartAsync(newItem));
             alert.success("Product added to cart!");
-        }else{
+        } else {
             alert.error("Product already in cart!");
         }
-
-        
-        
     };
 
     return (
@@ -351,7 +351,6 @@ export default function ProductDetail() {
                                     >
                                         Add to Cart
                                     </button>
-
                                 </form>
                             </div>
 

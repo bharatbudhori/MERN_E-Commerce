@@ -1,6 +1,6 @@
 export function createUser(userData) {
     return new Promise(async (resolve) => {
-        const response = await fetch("http://localhost:8080/users", {
+        const response = await fetch("http://localhost:8080/auth/signup", {
             method: "POST",
             body: JSON.stringify(userData),
             headers: {
@@ -12,31 +12,34 @@ export function createUser(userData) {
     });
 }
 
-export function checkUser(loginInfo){
-    return new Promise(async (resolve,reject) => {
-        const response = await fetch(`http://localhost:8080/users?email=${loginInfo.email}`);
-        const data = await response.json();
-        console.log(data);
-        if(data.length){
-            if(loginInfo.password === data[0].password){
-                resolve({ data : data[0] });
-            }else{
-                reject({ message: "Invalid email or password" });
+export function checkUser(loginInfo) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(`http://localhost:8080/auth/login`, {
+                method: "POST",
+                body: JSON.stringify(loginInfo),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log({ data });
+                resolve({ data });
+            } else {
+                const error = await response.json();
+                reject({ message : error.message });
             }
-
-        }else{
-            reject({ message: "User not found !" });
+        } catch (error) {
+            reject({ message: error.message });
         }
-        
     });
 }
 
 export function signOut(userId) {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve({ data: 'success' });
+            resolve({ data: "success" });
         }, 500);
     });
 }
-
-
