@@ -17,7 +17,7 @@ export function fetchProductById(productId) {
     });
 }
 
-export function fetchProductsByFilters(filter, sort, pagination) {
+export function fetchProductsByFilters(filter, sort, pagination, admin) {
     //filters = {"category" : ["smartphone", "laptop"], "brand" : ["apple", "samsung"]]}
     //sort = {_sort: "price", _order: "desc"}
     //pagination = {_page: "1", _limit: 10} // _page=1&_limit=10
@@ -38,6 +38,10 @@ export function fetchProductsByFilters(filter, sort, pagination) {
     for (let key in pagination) {
         const paginationValue = pagination[key];
         queryString += `${key}=${paginationValue}&`;
+    }
+
+    if(admin){
+        queryString += `admin=true&`;
     }
 
     return new Promise(async (resolve) => {
@@ -79,18 +83,21 @@ export const createProduct = (product) => {
         const data = await response.json();
         resolve({ data });
     });
-}
+};
 
 export const updateProduct = (product) => {
     return new Promise(async (resolve) => {
-        const response = await fetch("http://localhost:8080/products/" + product.id, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(product),
-        });
+        const response = await fetch(
+            "http://localhost:8080/products/" + product.id,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(product),
+            }
+        );
         const data = await response.json();
         resolve({ data });
     });
-}
+};

@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import Modal from "../../common/Modal";
+import { useAlert } from "react-alert";
 
 function ProductForm() {
     const brands = useSelector(selectBrands);
@@ -20,6 +21,7 @@ function ProductForm() {
     const dispatch = useDispatch();
     const selectedProduct = useSelector(selectProductById);
     const [showModal, setShowModal] = useState(null);
+    const alert = useAlert();
     const {
         register,
         handleSubmit,
@@ -85,8 +87,10 @@ function ProductForm() {
                         product.id = params.id;
                         product.rating = selectedProduct.rating || 0;
                         dispatch(updateProductAsync(product));
+                        alert.success("Product updated successfully !");
                     } else {
                         dispatch(createProductAsync(product));
+                        alert.success("Product created successfully !");
                     }
                     reset();
                 })}
@@ -102,7 +106,7 @@ function ProductForm() {
                         </p>
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            {selectedProduct.deleted && 
+                             {selectedProduct && selectedProduct.deleted && 
                                 <h2 className="text-red-500 sm:col-span-6">
                                     Product has been deleted
                                 </h2>
