@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     fecthLoggedInUserOrdersAsync,
-    selectUserInfo,
     selectUserOrders,
+    selectUserStatus,
 } from "../userSlice";
 import { discountedPrice } from "../../../app/constants";
+import { Grid } from "react-loader-spinner";
 
 export default function UserOrders() {
     const dispatch = useDispatch();
-    const userInfo = useSelector(selectUserInfo);
     const orders = useSelector(selectUserOrders);
+    const userStatus = useSelector(selectUserStatus);
 
     useEffect(() => {
-        dispatch(fecthLoggedInUserOrdersAsync(userInfo.id));
+        dispatch(fecthLoggedInUserOrdersAsync());
     }, [dispatch]);
 
     return (
@@ -132,6 +133,18 @@ export default function UserOrders() {
                         </div>
                     </div>
                 ))}
+            {userStatus === "loading" && (
+                        <Grid
+                            height="80"
+                            width="80"
+                            color="#4fa94d"
+                            ariaLabel="grid-loading"
+                            radius="12.5"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                        />
+                    )}
         </div>
     );
 }

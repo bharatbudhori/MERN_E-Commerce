@@ -9,7 +9,6 @@ import {
     fetchProductByIdAsync,
 } from "../../product/productSlice";
 import { addToCartAsync } from "../../cart/cartSlice";
-import { selectUserInfo } from "../../user/userSlice";
 import { discountedPrice } from "../../../app/constants";
 
 const colors = [
@@ -36,7 +35,6 @@ export default function AdminProductDetail() {
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [selectedSize, setSelectedSize] = useState(sizes[2]);
     const product = useSelector(selectProductById);
-    const user = useSelector(selectUserInfo);
     const dispatch = useDispatch();
     const id = useParams().id;
 
@@ -46,7 +44,7 @@ export default function AdminProductDetail() {
 
     const handleCart = (e) => {
         e.preventDefault();
-        const newItem = { ...product, quantity: 1, user: user.id };
+        const newItem = { ...product, quantity: 1 };
         delete newItem["id"];
         dispatch(addToCartAsync(newItem));
     };

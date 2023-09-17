@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link, Navigate } from "react-router-dom";
-import { checkUserAsync, selectError, selectLoggedInUser } from "../authSlice";
+import { loginUserAsync, selectError, selectLoggedInUser } from "../authSlice";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
@@ -35,7 +35,7 @@ export default function Login() {
                         noValidate
                         onSubmit={handleSubmit((data) => {
                             dispatch(
-                                checkUserAsync({
+                                loginUserAsync({
                                     email: data.email,
                                     password: data.password,
                                 })

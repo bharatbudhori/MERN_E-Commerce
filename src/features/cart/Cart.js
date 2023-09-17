@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteItemAsync, selectItems, updateItemAsync } from "./cartSlice";
+import { deleteItemAsync, selectCartLoaded, selectItems, updateItemAsync } from "./cartSlice";
 import { Link, Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
 import Modal from "../common/Modal";
@@ -10,6 +10,7 @@ export default function Cart() {
     const items = useSelector(selectItems);
     const [open, setOpen] = useState(true);
     const [showModal, setShowModal] = useState(null);
+    const cartLoaded = useSelector(selectCartLoaded);
 
     const totalAmount = items.reduce(
         (amount, item) => discountedPrice(item.product) * item.quantity + amount,
@@ -27,7 +28,7 @@ export default function Cart() {
 
     return (
         <>
-            {!items.length && <Navigate to="/" replace={true} />}
+            {cartLoaded && !items.length && <Navigate to="/" replace={true} />}
             <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">

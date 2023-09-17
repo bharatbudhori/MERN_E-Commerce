@@ -21,7 +21,7 @@ function ProductForm() {
     const dispatch = useDispatch();
     const selectedProduct = useSelector(selectProductById);
     const [showModal, setShowModal] = useState(null);
-    const alert = useAlert();
+    const alert = useAlert ();
     const {
         register,
         handleSubmit,
