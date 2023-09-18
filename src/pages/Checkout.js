@@ -7,9 +7,7 @@ import {
     updateItemAsync,
 } from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
-import {
-    updateUserAsync,
-} from "../features/user/userSlice";
+import { updateUserAsync } from "../features/user/userSlice";
 import {
     createOrderAsync,
     selectCurrentOrder,
@@ -32,7 +30,8 @@ function Checkout() {
     const currentOrder = useSelector(selectCurrentOrder);
     const dispatch = useDispatch();
     const totalAmount = items.reduce(
-        (amount, item) => discountedPrice(item.product) * item.quantity + amount,
+        (amount, item) =>
+            discountedPrice(item.product) * item.quantity + amount,
         0
     );
     const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -41,7 +40,7 @@ function Checkout() {
     const [paymentMethod, setPaymentMethod] = useState("cash");
 
     const handleQuantity = (e, item) => {
-        dispatch(updateItemAsync({ id:item.id, quantity: +e.target.value }));
+        dispatch(updateItemAsync({ id: item.id, quantity: +e.target.value }));
     };
 
     const handleDelete = (e, id) => {
@@ -61,7 +60,7 @@ function Checkout() {
             items,
             totalAmount,
             totalItems,
-            user : user.id,
+            user: user.id,
             selectedAddress,
             paymentMethod,
             status: "pending",
@@ -72,7 +71,18 @@ function Checkout() {
     return (
         <>
             {!items.length && <Navigate to="/" replace={true} />}
-            {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true} />}
+            {currentOrder && currentOrder.paymentMethod == "cash" && (
+                <Navigate
+                    to={`/order-success/${currentOrder.id}`}
+                    replace={true}
+                />
+            )}
+            {currentOrder && currentOrder.paymentMethod == "card" && (
+                <Navigate
+                    to={`/stripe-checkout/`}
+                    replace={true}
+                />
+            )}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
                     <div className="lg:col-span-3">
@@ -382,7 +392,10 @@ function Checkout() {
                                             >
                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                     <img
-                                                        src={item.product.thumbnail}
+                                                        src={
+                                                            item.product
+                                                                .thumbnail
+                                                        }
                                                         alt={item.product.title}
                                                         className="h-full w-full object-cover object-center"
                                                     />
@@ -394,14 +407,22 @@ function Checkout() {
                                                             <h3>
                                                                 <a
                                                                     href={
-                                                                        item.product.id
+                                                                        item
+                                                                            .product
+                                                                            .id
                                                                     }
                                                                 >
-                                                                    {item.product.title}
+                                                                    {
+                                                                        item
+                                                                            .product
+                                                                            .title
+                                                                    }
                                                                 </a>
                                                             </h3>
                                                             <p className="ml-4">
-                                                                {discountedPrice(item.product)}
+                                                                {discountedPrice(
+                                                                    item.product
+                                                                )}
                                                             </p>
                                                         </div>
                                                         <p className="mt-1 text-sm text-gray-500">

@@ -1,6 +1,6 @@
 export function createOrder(order) {
     return new Promise(async (resolve) => {
-        const response = await fetch("http://localhost:8080/orders", {
+        const response = await fetch("/orders", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export function fetchAllOrders(sort, pagination) {
     return new Promise(async (resolve) => {
         //TODO: we will not hardcode the u rl here
         const response = await fetch(
-            "http://localhost:8080/orders?" + queryString
+            "/orders?" + queryString
         );
         const data = await response.json();
         const totalOrders = response.headers.get("X-Total-Count");
@@ -40,7 +40,7 @@ export function fetchAllOrders(sort, pagination) {
 export function updateOrder(order) {
     return new Promise(async (resolve) => {
         const response = await fetch(
-            "http://localhost:8080/orders/" + order.id,
+            "/orders/" + order.id,
             {
                 method: "PATCH",
                 headers: {
